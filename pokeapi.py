@@ -1,20 +1,41 @@
-# importing modules
-from flask import Flask, render_template
+import json
+from flask import Flask, jsonify, request,render_template
+import csv
+import random
 
-# declaring app name
+with open('pokeparser.csv', 'r') as csvfile:
+            csvreader = csv.DictReader(csvfile)
+            pokedatajson = []
+            for pokemon in csvreader:
+                pokedatajson.append(pokemon)
+               
+namelist=[]
+for pokemon in pokedatajson:
+    
+        namelist.append(pokemon['name'])
+
+# creating a Flask app
 app = Flask(__name__)
-
-# making list of pokemons
-Pokemons =["Pikachu", "Charizard", "Squirtle", "Jigglypuff",
-		"Bulbasaur", "Gengar", "Charmander", "Mew", "Lugia", "Gyarados"]
-
-# defining home page
+  
 @app.route('/')
 def homepage():
+    pokename = random.choice(namelist)
+    for pokemon in pokedatajson:
+        if pokename in pokemon['name']:
+            return jsonify(pokemon)
 
-# returning index.html and list
-# and length of list to html page
-	return render_template("index.html", len = len(Pokemons), Pokemons = Pokemons)
+@app.route('/pokemon/<path:subpath>')
+def pokemonpages(subpath):
+
+    for pokemon in pokedatajson:
+        if subpath in pokemon['name']:
+            
+            return jsonify(pokemon)
+    # for pokemon in pokedatajson:
+    #     if name in pokemon['name']:
+            
+
+    #         return jsonify(pokemon)
 
 if __name__ == '__main__':
 
