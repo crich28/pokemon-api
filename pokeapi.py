@@ -1,5 +1,6 @@
 
-from flask import Flask
+from operator import sub
+from flask import Flask, abort
 import csv
 
 
@@ -18,8 +19,11 @@ def homepage():
 
 @app.route('/pokemon/<subpath>')
 def pokemonpages(subpath):
-
-    return pokedatajson[subpath]
+    
+    try:
+        return pokedatajson[subpath]
+    except KeyError:
+        abort(404)
 
 
 if __name__ == '__main__':
