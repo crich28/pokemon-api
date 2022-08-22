@@ -5,9 +5,9 @@ import csv
 
 with open('pokeparser.csv', 'r') as csvfile:
             csvreader = csv.DictReader(csvfile)
-            pokedatajson = []
+            pokedatajson = {}
             for pokemon in csvreader:
-                pokedatajson.append(pokemon)
+                pokedatajson.update({pokemon['name']:pokemon})
                
 
 app = Flask(__name__)
@@ -19,10 +19,7 @@ def homepage():
 @app.route('/pokemon/<subpath>')
 def pokemonpages(subpath):
 
-    for pokemon in pokedatajson:
-        if subpath in pokemon['name']:
-            
-            return (pokemon)
+    return pokedatajson[subpath]
 
 
 if __name__ == '__main__':
